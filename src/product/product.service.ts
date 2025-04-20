@@ -13,7 +13,18 @@ export class ProductService {
     });
   }
 
-  async findAll() {
+  async findAll(name?: string) {
+    if (name) {
+      return this.prisma.product.findMany({
+        where: {
+          name: {
+            contains: name,
+            mode: 'insensitive',
+          },
+        },
+      });
+    }
+
     return this.prisma.product.findMany();
   }
 
