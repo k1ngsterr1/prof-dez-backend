@@ -7,18 +7,45 @@ import {
   Param,
   Delete,
   Query,
+  UseInterceptors,
+  UploadedFiles,
 } from '@nestjs/common';
+import { FilesInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+import { extname } from 'path';
+
 import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 
+const storage = diskStorage({
+  destination: './uploads/products',
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+    cb(null, uniqueSuffix + extname(file.originalname));
+  },
+});
+
 @Controller('product')
 export class ProductController {
+  base_url =
+    process.env.NODE_ENV === 'production' ? '' : 'http://localhost:6001';
   constructor(private readonly productService: ProductService) {}
 
   @Post()
-  create(@Body() createProductDto: CreateProductDto) {
-    return this.productService.create(createProductDto);
+  @UseInterceptors(FilesInterceptor('images', 10, { storage }))
+  create(
+    @Body() createProductDto: CreateProductDto,
+    @UploadedFiles() images: any[],
+  ) {
+    console.log(createProductDto);
+    const imageFilenames = images?.map(
+      (file) => `${this.base_url}/uploads/products/${file.filename}`,
+    );
+    return this.productService.create({
+      ...createProductDto,
+      images: imageFilenames,
+    });
   }
 
   @Get()
@@ -32,8 +59,19 @@ export class ProductController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto) {
-    return this.productService.update(+id, updateProductDto);
+  @UseInterceptors(FilesInterceptor('images', 10, { storage }))
+  update(
+    @Param('id') id: string,
+    @Body() updateProductDto: UpdateProductDto,
+    @UploadedFiles() images: any[],
+  ) {
+    const imageFilenames = images?.map(
+      (file) => `${this.base_url}/uploads/products/${file.filename}`,
+    );
+    return this.productService.update(+id, {
+      ...updateProductDto,
+      images: imageFilenames,
+    });
   }
 
   @Delete(':id')

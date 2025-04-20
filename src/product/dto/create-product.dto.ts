@@ -23,14 +23,17 @@ export class CreateProductDto {
   @IsNotEmpty()
   description: string;
 
+  @IsOptional()
   @IsArray()
   @ArrayNotEmpty()
   @IsString({ each: true })
   images: string[];
 
+  @Type(() => Boolean)
   @IsBoolean()
   isInStock: boolean;
 
+  @Type(() => Boolean)
   @IsOptional()
   @IsBoolean()
   isPopular?: boolean;
