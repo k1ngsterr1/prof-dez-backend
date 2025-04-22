@@ -7,6 +7,7 @@ import {
   IsArray,
   ArrayNotEmpty,
   IsPositive,
+  IsInt,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
@@ -23,6 +24,9 @@ export class CreateProductDto {
   @IsNotEmpty()
   description: string;
 
+  @IsString()
+  volume: string;
+
   @IsOptional()
   @IsArray()
   @ArrayNotEmpty()
@@ -32,6 +36,9 @@ export class CreateProductDto {
   @Type(() => Boolean)
   @IsBoolean()
   isInStock: boolean;
+
+  @IsString()
+  expiry: string;
 
   @Type(() => Boolean)
   @IsOptional()
