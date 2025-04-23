@@ -6,10 +6,14 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
+  Request,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { AuthGuard } from 'src/shared/guards/auth.guard';
+import { FormDto } from './dto/form.dto';
 
 @Controller('user')
 export class UserController {
@@ -18,6 +22,16 @@ export class UserController {
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto);
+  }
+
+  @Post('login')
+  login(@Body() data: { email: string; password: string }) {
+    return this.userService.login(data.email, data.password);
+  }
+
+  @Post('form')
+  sendForm(@Body() data: FormDto) {
+    return this.userService.sendForm(data);
   }
 
   @Get()
