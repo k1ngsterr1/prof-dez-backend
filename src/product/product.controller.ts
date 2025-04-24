@@ -49,8 +49,8 @@ export class ProductController {
   }
 
   @Get()
-  findAll(@Query('name') name?: string) {
-    return this.productService.findAll(name);
+  findAll(@Query('category') category?: string) {
+    return this.productService.findAll(category);
   }
 
   @Get(':id')

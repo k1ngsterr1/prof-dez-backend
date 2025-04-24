@@ -13,12 +13,12 @@ export class ProductService {
     });
   }
 
-  async findAll(name?: string) {
-    if (name) {
+  async findAll(category?: string) {
+    if (category) {
       return this.prisma.product.findMany({
         where: {
-          name: {
-            contains: name,
+          category: {
+            contains: category,
             mode: 'insensitive',
           },
         },
