@@ -52,6 +52,7 @@ async function bootstrap() {
     ],
     optionsSuccessStatus: 204,
   });
+  //
 
   app.useStaticAssets(join(__dirname, 'uploads'), {
     prefix: '/uploads/',
