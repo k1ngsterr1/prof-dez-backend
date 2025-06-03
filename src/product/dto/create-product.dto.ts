@@ -45,8 +45,9 @@ export class CreateProductDto {
   @IsBoolean()
   isPopular?: boolean;
 
+  @IsOptional()
   @IsNumber({ maxDecimalPlaces: 2 })
   @IsPositive()
   @Type(() => Number)
-  price: number;
+  price?: number;
 }
