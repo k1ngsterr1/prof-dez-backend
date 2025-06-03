@@ -29,7 +29,9 @@ const storage = diskStorage({
 @Controller('product')
 export class ProductController {
   base_url =
-    process.env.NODE_ENV === 'production' ? '' : 'http://localhost:6001';
+    process.env.NODE_ENV === 'production'
+      ? 'https://profdez.kz'
+      : 'http://localhost:6001';
   constructor(private readonly productService: ProductService) {}
 
   @Post()
