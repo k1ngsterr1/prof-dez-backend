@@ -14,6 +14,7 @@ export class ProductService {
   }
 
   async findAll(category?: string) {
+    console.log(category);
     if (category) {
       return this.prisma.product.findMany({
         where: {
