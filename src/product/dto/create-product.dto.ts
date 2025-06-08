@@ -1,15 +1,16 @@
+// dto/create-product.dto.ts
 import {
   IsString,
   IsNotEmpty,
   IsBoolean,
   IsOptional,
-  IsNumber,
   IsArray,
   ArrayNotEmpty,
-  IsPositive,
-  IsInt,
+  ValidateNested,
+  IsISO8601,
 } from 'class-validator';
 import { Type } from 'class-transformer';
+import { ItemDto } from './item.dto';
 
 export class CreateProductDto {
   @IsString()
@@ -24,9 +25,6 @@ export class CreateProductDto {
   @IsNotEmpty()
   description: string;
 
-  @IsString()
-  volume: string;
-
   @IsOptional()
   @IsArray()
   @ArrayNotEmpty()
@@ -38,6 +36,7 @@ export class CreateProductDto {
   isInStock: boolean;
 
   @IsString()
+  @IsISO8601()
   expiry: string;
 
   @Type(() => Boolean)
@@ -45,9 +44,9 @@ export class CreateProductDto {
   @IsBoolean()
   isPopular?: boolean;
 
-  @IsOptional()
-  @IsNumber({ maxDecimalPlaces: 2 })
-  @IsPositive()
-  @Type(() => Number)
-  price?: number;
+  @IsArray()
+  @ArrayNotEmpty()
+  @ValidateNested({ each: true })
+  @Type(() => ItemDto)
+  items: ItemDto[];
 }

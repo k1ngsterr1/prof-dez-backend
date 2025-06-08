@@ -31,8 +31,7 @@ model Product {
   images      String[]
   isInStock   Boolean
   isPopular   Boolean?
-  price       Decimal?       @db.Decimal(10, 2)
-  volume      String        
+  items       Json      
   expiry      String
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
