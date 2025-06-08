@@ -17,6 +17,7 @@ import { extname } from 'path';
 import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
+import { ItemDto } from './dto/item.dto';
 
 const storage = diskStorage({
   destination: './uploads/products',

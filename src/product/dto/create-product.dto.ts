@@ -9,7 +9,7 @@ import {
   ValidateNested,
   IsISO8601,
 } from 'class-validator';
-import { Type } from 'class-transformer';
+import { plainToInstance, Transform, Type } from 'class-transformer';
 import { ItemDto } from './item.dto';
 
 export class CreateProductDto {
@@ -31,22 +31,36 @@ export class CreateProductDto {
   @IsString({ each: true })
   images: string[];
 
-  @Type(() => Boolean)
+  @Transform(({ value }) => {
+    return value === 'true';
+  })
   @IsBoolean()
   isInStock: boolean;
 
   @IsString()
-  @IsISO8601()
   expiry: string;
 
-  @Type(() => Boolean)
+  @Transform(({ value }) => {
+    return value === 'true';
+  })
   @IsOptional()
   @IsBoolean()
   isPopular?: boolean;
 
+  @Transform(({ value }) => {
+    if (typeof value === 'string') {
+      try {
+        const parsed = JSON.parse(value);
+        return Array.isArray(parsed) ? plainToInstance(ItemDto, parsed) : [];
+      } catch {
+        return [];
+      }
+    }
+    return value;
+  })
+  @ValidateNested({ each: true })
   @IsArray()
   @ArrayNotEmpty()
-  @ValidateNested({ each: true })
   @Type(() => ItemDto)
   items: ItemDto[];
 }

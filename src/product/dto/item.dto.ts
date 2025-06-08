@@ -4,7 +4,7 @@ import { Type } from 'class-transformer';
 
 export class ItemDto {
   @Type(() => Number)
-  @IsNumber()
+  @IsNumber({ maxDecimalPlaces: 2 })
   @IsPositive()
   price: number;
 
