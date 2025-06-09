@@ -17,7 +17,17 @@ export class ProductService {
     });
   }
 
-  async findAll(category?: string) {
+  async findAll(category?: string, subcategory?: string) {
+    if (subcategory) {
+      return this.prisma.product.findMany({
+        where: {
+          subcategory: {
+            contains: subcategory,
+            mode: 'insensitive',
+          },
+        },
+      });
+    }
     if (category) {
       return this.prisma.product.findMany({
         where: {

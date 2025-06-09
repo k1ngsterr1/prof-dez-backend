@@ -52,8 +52,11 @@ export class ProductController {
   }
 
   @Get()
-  findAll(@Query('category') category?: string) {
-    return this.productService.findAll(category);
+  findAll(
+    @Query('category') category?: string,
+    @Query('subcategory') subcategory?: string,
+  ) {
+    return this.productService.findAll(category, subcategory);
   }
 
   @Get(':id')
