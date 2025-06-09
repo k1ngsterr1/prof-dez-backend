@@ -48,7 +48,7 @@ model Category {
 
 model Subcategory {
   id          Int          @id @default(autoincrement())
-  name        String       @unique
+  name        String       
   categoryId  Int
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
