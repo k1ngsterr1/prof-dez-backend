@@ -14,6 +14,15 @@ export class SubcategoryService {
   async findAll() {
     return this.prisma.subcategory.findMany({ include: { category: true } });
   }
+  async findByCategory(categoryId: number) {
+    const subcategories = await this.prisma.subcategory.findMany({
+      where: { categoryId },
+    });
+    if (subcategories.length === 0) {
+      throw new NotFoundException('No subcategories found for this category');
+    }
+    return subcategories;
+  }
 
   async findOne(id: number) {
     const subcategory = await this.prisma.subcategory.findUnique({

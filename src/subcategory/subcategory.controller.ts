@@ -21,6 +21,11 @@ export class SubcategoryController {
     return this.subcategoryService.create(dto);
   }
 
+  @Get('category/:categoryId')
+  findByCategory(@Param('categoryId', ParseIntPipe) categoryId: number) {
+    return this.subcategoryService.findByCategory(categoryId);
+  }
+
   @Get()
   findAll() {
     return this.subcategoryService.findAll();
