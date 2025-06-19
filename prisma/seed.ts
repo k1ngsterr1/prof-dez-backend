@@ -267,12 +267,28 @@ const products = [
   },
 ];
 async function main() {
-  console.log(`Seeding ${products.length} products…`);
-  await prisma.product.createMany({
-    data: products,
-    skipDuplicates: true, // won't error if you run seed multiple times
-  });
-  console.log('Done.');
+  for (const p of products) {
+    await prisma.product.upsert({
+      where: { id: p.id },
+      update: {},
+      create: {
+        id: p.id,
+        name: p.name,
+        description: p.description,
+        images: p.images,
+        isInStock: p.isInStock,
+        isPopular: p.isPopular,
+        items: p.items,
+        expiry: p.expiry,
+        createdAt: p.createdAt,
+        updatedAt: p.updatedAt,
+        categories: {
+          connect: p.categories.map((id) => ({ id })),
+        },
+      },
+    });
+  }
+  console.log('Seeding completed.');
 }
 
 main()
