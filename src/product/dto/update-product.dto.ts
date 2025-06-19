@@ -12,7 +12,7 @@ import {
 import { plainToInstance, Transform, Type } from 'class-transformer';
 import { ItemDto } from './item.dto';
 
-export class CreateProductDto {
+export class UpdateProductDto {
   @IsOptional()
   @IsString()
   @IsNotEmpty()

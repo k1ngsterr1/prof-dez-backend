@@ -99,18 +99,17 @@ export class ProductService {
   async update(id: number, dto: UpdateProductDto) {
     await this.findOne(id); // бросит 404, если не найден
 
-    const {
-      categoryIds,
-      subcategoryIds = [],
-      items,
-      ...rest
-    } = UpdateProductDto;
-
-    const { items, ...rest } = dto;
+    const { categoryIds, subcategoryIds, items, ...rest } = dto;
 
     const data: Prisma.ProductUpdateInput = {
       ...rest,
       items: items ? JSON.stringify(items) : undefined,
+      categories: categoryIds
+        ? { set: categoryIds.map((id) => ({ id: Number(id) })) }
+        : undefined,
+      subcategories: subcategoryIds
+        ? { set: subcategoryIds.map((id) => ({ id: Number(id) })) }
+        : undefined,
     };
 
     return this.prisma.product.update({
