@@ -24,33 +24,38 @@ datasource db {
 }
 
 model Product {
-  id          Int          @id @default(autoincrement())
-  name        String
-  category    String
-  subcategory String
-  description String
-  images      String[]
-  isInStock   Boolean
-  isPopular   Boolean?
-  items       Json      
-  expiry      String
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
+  id            Int           @id @default(autoincrement())
+  name          String
+  description   String
+  images        String[]
+  isInStock     Boolean
+  isPopular     Boolean?
+  items         Json
+  expiry        String
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  categories    Category[]
+  subcategories Subcategory[]
 }
 
 model Category {
-  id            Int          @id @default(autoincrement())
-  name          String       @unique
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @updatedAt
+  id            Int           @id @default(autoincrement())
+  name          String        @unique
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
   subcategories Subcategory[]
+  products      Product[]
 }
 
 model Subcategory {
   id          Int          @id @default(autoincrement())
-  name        String       
+  name        String
   categoryId  Int
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
   category    Category     @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  products    Product[]
 }

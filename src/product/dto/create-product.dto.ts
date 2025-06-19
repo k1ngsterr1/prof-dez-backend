@@ -17,12 +17,22 @@ export class CreateProductDto {
   @IsNotEmpty()
   name: string;
 
-  @IsString()
-  @IsNotEmpty()
-  category: string;
+  @Transform(({ value }) => {
+    console.log(value);
+    typeof value === 'string' ? value.split(',') : value;
+  })
+  @IsArray()
+  @ArrayNotEmpty()
+  @IsString({ each: true })
+  categoryIds: string[];
 
-  @IsString()
-  subcategory: string;
+  @Transform(({ value }) =>
+    typeof value === 'string' ? value.split(',') : value,
+  )
+  @IsArray()
+  @ArrayNotEmpty()
+  @IsString({ each: true })
+  subcategoryIds: string[];
 
   @IsString()
   @IsNotEmpty()

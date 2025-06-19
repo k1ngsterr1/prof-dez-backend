@@ -12,6 +12,7 @@ export class ProductService {
     return this.prisma.product.create({
       data: {
         ...createProductDto,
+
         items: JSON.stringify(createProductDto.items),
       },
     });
@@ -21,25 +22,36 @@ export class ProductService {
     if (subcategory) {
       return this.prisma.product.findMany({
         where: {
-          subcategory: {
-            contains: subcategory,
-            mode: 'insensitive',
-          },
-        },
-      });
-    }
-    if (category) {
-      return this.prisma.product.findMany({
-        where: {
-          category: {
-            contains: category,
-            mode: 'insensitive',
+          subcategories: {
+            some: {
+              name: {
+                contains: subcategory,
+                mode: 'insensitive',
+              },
+            },
           },
         },
       });
     }
 
-    return this.prisma.product.findMany();
+    if (category) {
+      return this.prisma.product.findMany({
+        where: {
+          categories: {
+            some: {
+              name: {
+                contains: category,
+                mode: 'insensitive',
+              },
+            },
+          },
+        },
+      });
+    }
+
+    return this.prisma.product.findMany({
+      include: { categories: true, subcategories: true },
+    });
   }
 
   async findOne(id: number) {
