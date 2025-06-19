@@ -39,7 +39,6 @@ export class UpdateProductDto {
     }
   })
   @IsArray()
-  @ArrayNotEmpty()
   subcategoryIds: string[];
 
   @IsOptional()
