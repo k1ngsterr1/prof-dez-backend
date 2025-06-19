@@ -31,7 +31,7 @@ async function bootstrap() {
       transform: true,
     }),
   );
-  app.setGlobalPrefix('api');
+  // app.setGlobalPrefix('api');
 
   // CORS
   app.enableCors({
