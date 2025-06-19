@@ -267,28 +267,23 @@ const products = [
   },
 ];
 async function main() {
+  // Обновление только связей категорий для существующих продуктов
   for (const p of products) {
-    await prisma.product.upsert({
+    await prisma.product.update({
       where: { id: p.id },
-      update: {},
-      create: {
-        id: p.id,
-        name: p.name,
-        description: p.description,
-        images: p.images,
-        isInStock: p.isInStock,
-        isPopular: p.isPopular,
-        items: p.items,
-        expiry: p.expiry,
-        createdAt: p.createdAt,
-        updatedAt: p.updatedAt,
+      data: {
         categories: {
-          connect: p.categories.map((id) => ({ id })),
+          // Сбросить старые и установить новые категории
+          set: p.categories.map((id) => ({ id })),
         },
+        // при необходимости можно аналогично обновить subcategories
+        // subcategories: {
+        //   set: p.subcategoryIds.map(id => ({ id })),
+        // },
       },
     });
   }
-  console.log('Seeding completed.');
+  console.log('Categories updated successfully.');
 }
 
 main()
