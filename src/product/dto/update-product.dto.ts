@@ -1,16 +1,77 @@
-// dto/update-product.dto.ts
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateProductDto } from './create-product.dto';
+// dto/create-product.dto.ts
 import {
+  IsString,
+  IsNotEmpty,
+  IsBoolean,
+  IsOptional,
   IsArray,
   ArrayNotEmpty,
   ValidateNested,
-  IsOptional,
+  IsISO8601,
 } from 'class-validator';
-import { Transform, Type, plainToInstance } from 'class-transformer';
+import { plainToInstance, Transform, Type } from 'class-transformer';
 import { ItemDto } from './item.dto';
 
-export class UpdateProductDto extends PartialType(CreateProductDto) {
+export class CreateProductDto {
+  @IsOptional()
+  @IsString()
+  @IsNotEmpty()
+  name: string;
+
+  @IsOptional()
+  @Transform(({ value }) => {
+    try {
+      return JSON.parse(value);
+    } catch {
+      return typeof value === 'string' ? value.split(',') : [];
+    }
+  })
+  @IsArray()
+  @ArrayNotEmpty()
+  categoryIds: string[];
+
+  @IsOptional()
+  @Transform(({ value }) => {
+    try {
+      return JSON.parse(value);
+    } catch {
+      return typeof value === 'string' ? value.split(',') : [];
+    }
+  })
+  @IsArray()
+  @ArrayNotEmpty()
+  subcategoryIds: string[];
+
+  @IsOptional()
+  @IsString()
+  @IsNotEmpty()
+  description: string;
+
+  @IsOptional()
+  @IsArray()
+  @ArrayNotEmpty()
+  @IsString({ each: true })
+  images: string[];
+
+  @IsOptional()
+  @Transform(({ value }) => {
+    return value === 'true';
+  })
+  @IsBoolean()
+  isInStock: boolean;
+
+  @IsOptional()
+  @IsString()
+  expiry: string;
+
+  @IsOptional()
+  @Transform(({ value }) => {
+    return value === 'true';
+  })
+  @IsOptional()
+  @IsBoolean()
+  isPopular?: boolean;
+
   @IsOptional()
   @Transform(({ value }) => {
     if (typeof value === 'string') {
@@ -27,5 +88,5 @@ export class UpdateProductDto extends PartialType(CreateProductDto) {
   @IsArray()
   @ArrayNotEmpty()
   @Type(() => ItemDto)
-  items?: ItemDto[];
+  items: ItemDto[];
 }

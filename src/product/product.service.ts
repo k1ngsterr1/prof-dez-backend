@@ -99,6 +99,13 @@ export class ProductService {
   async update(id: number, dto: UpdateProductDto) {
     await this.findOne(id); // бросит 404, если не найден
 
+    const {
+      categoryIds,
+      subcategoryIds = [],
+      items,
+      ...rest
+    } = UpdateProductDto;
+
     const { items, ...rest } = dto;
 
     const data: Prisma.ProductUpdateInput = {
