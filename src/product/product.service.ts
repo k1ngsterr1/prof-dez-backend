@@ -9,11 +9,35 @@ export class ProductService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(createProductDto: CreateProductDto) {
+    // «Вытаскиваем» нужные поля, чтобы не растаскивать categoryIds/subcategoryIds в spread
+    const {
+      categoryIds,
+      subcategoryIds = [],
+      items,
+      ...rest
+    } = createProductDto;
+
     return this.prisma.product.create({
       data: {
-        ...createProductDto,
+        ...rest,
 
-        items: JSON.stringify(createProductDto.items),
+        items: JSON.stringify(items),
+
+        categories: {
+          connect: categoryIds.map((id) => ({
+            id: Number(id),
+          })),
+        },
+
+        subcategories: {
+          connect: subcategoryIds.map((id) => ({
+            id: Number(id),
+          })),
+        },
+      },
+      include: {
+        categories: true,
+        subcategories: true,
       },
     });
   }
@@ -31,6 +55,10 @@ export class ProductService {
             },
           },
         },
+        include: {
+          categories: true,
+          subcategories: true,
+        },
       });
     }
 
@@ -46,6 +74,10 @@ export class ProductService {
             },
           },
         },
+        include: {
+          categories: true,
+          subcategories: true,
+        },
       });
     }
 
@@ -55,7 +87,10 @@ export class ProductService {
   }
 
   async findOne(id: number) {
-    const product = await this.prisma.product.findUnique({ where: { id } });
+    const product = await this.prisma.product.findUnique({
+      where: { id },
+      include: { categories: true, subcategories: true },
+    });
     if (!product)
       throw new NotFoundException(`Product with ID ${id} not found`);
     return product;

@@ -18,20 +18,25 @@ export class CreateProductDto {
   name: string;
 
   @Transform(({ value }) => {
-    console.log(value);
-    typeof value === 'string' ? value.split(',') : value;
+    try {
+      return JSON.parse(value);
+    } catch {
+      return typeof value === 'string' ? value.split(',') : [];
+    }
   })
   @IsArray()
   @ArrayNotEmpty()
-  @IsString({ each: true })
   categoryIds: string[];
 
-  @Transform(({ value }) =>
-    typeof value === 'string' ? value.split(',') : value,
-  )
+  @Transform(({ value }) => {
+    try {
+      return JSON.parse(value);
+    } catch {
+      return typeof value === 'string' ? value.split(',') : [];
+    }
+  })
   @IsArray()
   @ArrayNotEmpty()
-  @IsString({ each: true })
   subcategoryIds: string[];
 
   @IsString()
