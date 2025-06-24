@@ -13,7 +13,7 @@ import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { AuthGuard } from 'src/shared/guards/auth.guard';
-import { FormDto } from './dto/form.dto';
+import { ContactFormDto, FormDto } from './dto/form.dto';
 
 @Controller('user')
 export class UserController {
@@ -32,6 +32,11 @@ export class UserController {
   @Post('form')
   sendForm(@Body() data: FormDto) {
     return this.userService.sendForm(data);
+  }
+
+  @Post('contact-form')
+  sendContactForm(@Body() data: ContactFormDto) {
+    return this.userService.sendContactForm(data);
   }
 
   @Get()
