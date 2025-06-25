@@ -203,10 +203,10 @@ export class UserService {
     `;
 
     const transporter = nodemailer.createTransport({
-      pool: true,
-      host: 'smtp.mail.ru',
-      port: 465,
-      secure: true,
+      host: 'mail.profdez.kz',
+      port: 587,
+      secure: false, // не SMTPS, а STARTTLS
+      requireTLS: true, // форсим апгрейд до шифрования
       auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS,
@@ -214,8 +214,8 @@ export class UserService {
       tls: {
         rejectUnauthorized: false,
       },
+      connectionTimeout: 10000,
     });
-    console.log(process.env.EMAIL_USER);
 
     const mailOptions: nodemailer.SendMailOptions = {
       from: process.env.EMAIL_USER,
@@ -356,10 +356,10 @@ export class UserService {
     `;
 
     const transporter = nodemailer.createTransport({
-      pool: true,
-      host: 'smtp.mail.ru',
-      port: 465,
-      secure: true,
+      host: 'mail.profdez.kz',
+      port: 587,
+      secure: false, // не SMTPS, а STARTTLS
+      requireTLS: true, // форсим апгрейд до шифрования
       auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS,
@@ -367,8 +367,8 @@ export class UserService {
       tls: {
         rejectUnauthorized: false,
       },
+      connectionTimeout: 10000,
     });
-    console.log(process.env.EMAIL_USER);
 
     const mailOptions: nodemailer.SendMailOptions = {
       from: process.env.EMAIL_USER,
