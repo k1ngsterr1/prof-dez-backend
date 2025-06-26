@@ -25,7 +25,6 @@ export class CreateProductDto {
     }
   })
   @IsArray()
-  @ArrayNotEmpty()
   categoryIds: string[];
 
   @Transform(({ value }) => {
@@ -36,7 +35,6 @@ export class CreateProductDto {
     }
   })
   @IsArray()
-  @ArrayNotEmpty()
   subcategoryIds: string[];
 
   @IsString()
